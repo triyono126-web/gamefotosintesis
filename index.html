@@ -1,0 +1,176 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Game edukasi interaktif tentang proses fotosintesis untuk siswa sekolah dasar.">
+<title>Petualangan Fotosintesis — Penjaga Tanaman Cilik</title>
+<style>
+:root{--green:#247a45;--lime:#b8e986;--cream:#fffbea;--blue:#dff4ff;--ink:#193b2b;--orange:#ffbe55}
+*{box-sizing:border-box} body{margin:0;font-family:system-ui,-apple-system,"Segoe UI",sans-serif;color:var(--ink);background:linear-gradient(180deg,#dff5ff 0,#f6ffe8 48%,#fff8dc 100%);min-height:100vh}
+header{padding:22px 16px 14px;text-align:center;background:#2f8a4c;color:white;border-bottom:6px solid #f8c957}
+header h1{margin:0;font-size:clamp(1.6rem,4vw,2.5rem)}header p{margin:8px auto 0;max-width:720px}
+main{max-width:1000px;margin:0 auto;padding:18px 14px 36px}.panel{background:#ffffffed;border:2px solid #d6edc9;border-radius:22px;padding:20px;margin:14px 0;box-shadow:0 7px 0 #c7e4bd}
+h2{margin-top:0;color:#246b3b}.intro{display:grid;grid-template-columns:1.2fr .8fr;gap:16px;align-items:center}
+.plant-art{font-size:clamp(5rem,15vw,9rem);text-align:center;background:#eaf9d9;border-radius:20px;padding:12px}
+.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}.step{padding:14px;border-radius:16px;background:#f0f9e9;text-align:center}.step b{display:block;font-size:1.6rem}
+button{font:inherit;font-weight:700;border:0;border-radius:13px;padding:12px 16px;background:#287b45;color:white;cursor:pointer;box-shadow:0 4px 0 #18582f;transition:transform .12s}button:hover{filter:brightness(1.06)}button:active{transform:translateY(2px);box-shadow:0 2px 0 #18582f}button:focus-visible{outline:3px solid #f2a900;outline-offset:3px}
+button.secondary{background:#e5f5dc;color:#1c5b32;box-shadow:0 4px 0 #b5d8a7}button.gold{background:#e79a20;box-shadow:0 4px 0 #a76b12}
+.choices{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin:14px 0}.choice{background:#f0f9e9;color:#1e5e35;box-shadow:0 4px 0 #c2dfb7;border:2px solid #d7edcc}.choice.selected{background:#c8f1a9;border-color:#32824c}
+.feedback{min-height:30px;font-weight:700;margin:12px 0}.progress{height:14px;border-radius:99px;background:#e0e9db;overflow:hidden;margin:12px 0}.progress span{display:block;height:100%;width:0;background:#58b957;transition:width .3s}
+.question{font-size:1.1rem;font-weight:750}.hidden{display:none!important}.score{font-size:1.25rem;font-weight:800;color:#247a45}.footer{text-align:center;font-size:.9rem;opacity:.85;padding:12px}
+@media(max-width:650px){.intro{grid-template-columns:1fr}.steps{grid-template-columns:1fr}.choices{grid-template-columns:1fr}.panel{padding:16px}}
+</style>
+</head>
+<body>
+<header>
+  <h1>🌱 Petualangan Fotosintesis</h1>
+  <p>Misi Penjaga Tanaman Cilik — Belajar bagaimana tumbuhan membuat makanannya sendiri!</p>
+</header>
+<main>
+  <section class="panel intro" id="welcome">
+    <div>
+      <h2>Halo, Penjaga Tanaman!</h2>
+      <p>Tanaman membutuhkan bantuanmu. Ayo cari tahu apa saja yang diperlukan agar tanaman dapat melakukan <b>fotosintesis</b> dan menghasilkan makanan.</p>
+      <p>Dalam game ini kamu akan menjelajahi kebutuhan tanaman, merangkai proses fotosintesis, lalu menjawab kuis.</p>
+      <button id="startBtn">Mulai Petualangan 🚀</button>
+    </div>
+    <div class="plant-art" aria-label="Ilustrasi tanaman">🌻</div>
+  </section>
+
+  <section class="panel hidden" id="mission">
+    <h2>🌞 Misi 1: Kumpulkan Kebutuhan Tanaman</h2>
+    <p>Pilih tiga hal yang dibutuhkan tumbuhan untuk melakukan fotosintesis. Pilih satu per satu!</p>
+    <div class="choices" id="ingredientChoices">
+      <button class="choice" data-item="cahaya">☀️ Cahaya matahari</button>
+      <button class="choice" data-item="air">💧 Air</button>
+      <button class="choice" data-item="karbon">🌬️ Karbon dioksida (CO₂)</button>
+      <button class="choice" data-item="pasir">🏖️ Pasir berwarna</button>
+      <button class="choice" data-item="oksigen">🫧 Oksigen sebagai bahan</button>
+      <button class="choice" data-item="pupuk">🧃 Minuman manis</button>
+    </div>
+    <div class="feedback" id="ingredientFeedback" aria-live="polite"></div>
+    <button id="checkIngredients">Periksa Pilihan</button>
+    <div class="progress"><span id="progressBar"></span></div>
+  </section>
+
+  <section class="panel hidden" id="process">
+    <h2>🍃 Misi 2: Rangkai Proses Fotosintesis</h2>
+    <p>Lengkapi kalimat berikut. Ingat: daun menggunakan energi cahaya untuk membantu mengubah air dan karbon dioksida menjadi gula (makanan) dan oksigen.</p>
+    <div class="steps">
+      <div class="step"><b>☀️</b>Cahaya matahari</div>
+      <div class="step"><b>💧 + 🌬️</b>Air + karbon dioksida</div>
+      <div class="step"><b>🍬 + 🫧</b>Gula + oksigen</div>
+    </div>
+    <p class="question">Bagian tumbuhan yang paling banyak melakukan fotosintesis adalah …</p>
+    <div class="choices" id="partChoices">
+      <button class="choice" data-answer="benar">🍃 Daun</button>
+      <button class="choice" data-answer="salah">🌱 Akar saja</button>
+      <button class="choice" data-answer="salah">🌸 Bunga saja</button>
+      <button class="choice" data-answer="salah">🪨 Batu di sekitar tanaman</button>
+    </div>
+    <div class="feedback" id="partFeedback" aria-live="polite"></div>
+    <button id="toQuiz" class="hidden">Lanjut ke Kuis ➜</button>
+  </section>
+
+  <section class="panel hidden" id="quiz">
+    <h2>🧠 Misi 3: Kuis Penjaga Tanaman</h2>
+    <div class="progress"><span id="quizProgress"></span></div>
+    <p class="question" id="questionText"></p>
+    <div class="choices" id="quizChoices"></div>
+    <div class="feedback" id="quizFeedback" aria-live="polite"></div>
+    <button id="nextQuestion" class="hidden">Pertanyaan Berikutnya ➜</button>
+  </section>
+
+  <section class="panel hidden" id="result">
+    <h2>🏆 Petualangan Selesai!</h2>
+    <div class="plant-art">🌳🌼🌿</div>
+    <p id="resultMessage"></p>
+    <p class="score" id="finalScore"></p>
+    <p>Ingat, fotosintesis membantu tumbuhan membuat makanan dan melepaskan oksigen. Jaga tanaman dan lingkungan kita!</p>
+    <button id="restartBtn">Main Lagi 🔄</button>
+  </section>
+  <div class="footer">Media pembelajaran IPAS SD • Petualangan Fotosintesis • Berjalan langsung di browser, tanpa akun atau instalasi.</div>
+</main>
+<script>
+(() => {
+  const $ = id => document.getElementById(id);
+  const sections = ["welcome","mission","process","quiz","result"];
+  function show(id){sections.forEach(s => $(s).classList.toggle("hidden",s!==id));}
+  let score=0, selected=new Set(), qIndex=0, answered=false;
+  const questions=[
+    {q:"Gas dari udara yang digunakan tumbuhan saat fotosintesis adalah …",a:["Karbon dioksida (CO₂)","Oksigen saja","Nitrogen saja","Asap kendaraan"],correct:0,explain:"Benar! Tumbuhan mengambil karbon dioksida dari udara."},
+    {q:"Air yang diperlukan tumbuhan umumnya diserap melalui …",a:["Bunga","Akar","Buah","Biji saja"],correct:1,explain:"Benar! Akar menyerap air dari tanah."},
+    {q:"Salah satu hasil fotosintesis yang menjadi makanan tumbuhan adalah …",a:["Gula (glukosa)","Pasir","Plastik","Tanah"],correct:0,explain:"Benar! Fotosintesis menghasilkan gula yang dapat digunakan tumbuhan."},
+    {q:"Mengapa cahaya matahari penting bagi fotosintesis?",a:["Sebagai sumber energi","Untuk mengubah daun menjadi akar","Sebagai pengganti air","Agar tanaman tidak membutuhkan udara"],correct:0,explain:"Benar! Cahaya menyediakan energi untuk proses fotosintesis."},
+    {q:"Gas yang dilepaskan sebagai salah satu hasil fotosintesis adalah …",a:["Karbon dioksida","Oksigen","Helium","Asap"],correct:1,explain:"Benar! Oksigen dilepaskan ke lingkungan."}
+  ];
+  $("startBtn").addEventListener("click",()=>show("mission"));
+  document.querySelectorAll("#ingredientChoices .choice").forEach(btn=>{
+    btn.addEventListener("click",()=>{
+      const item=btn.dataset.item;
+      if(selected.has(item)){selected.delete(item);btn.classList.remove("selected");}
+      else {selected.add(item);btn.classList.add("selected");}
+      $("ingredientFeedback").textContent="Pilihanmu: "+selected.size+" dari 3 bahan utama.";
+    });
+  });
+  $("checkIngredients").addEventListener("click",()=>{
+    const correct=["cahaya","air","karbon"];
+    const isCorrect=selected.size===3 && correct.every(x=>selected.has(x));
+    if(isCorrect){score+=3;$("ingredientFeedback").textContent="Hebat! Kamu memilih ketiga kebutuhan utama dengan tepat. +3 poin";$("progressBar").style.width="100%";$("checkIngredients").classList.add("hidden");setTimeout(()=>show("process"),650);}
+    else {$("ingredientFeedback").textContent="Belum tepat. Pilih cahaya matahari, air, dan karbon dioksida saja. Coba lagi, ya!";}
+  });
+  document.querySelectorAll("#partChoices .choice").forEach(btn=>{
+    btn.addEventListener("click",()=>{
+      if($("toQuiz").classList.contains("hidden")){
+        if(btn.dataset.answer==="benar"){score+=2;$("partFeedback").textContent="Tepat! Daun mengandung klorofil yang menangkap energi cahaya. +2 poin";}
+        else {$("partFeedback").textContent="Coba lagi. Daun adalah tempat utama fotosintesis pada kebanyakan tumbuhan." ;return;}
+        $("toQuiz").classList.remove("hidden");
+        document.querySelectorAll("#partChoices .choice").forEach(b=>b.disabled=true);
+      }
+    });
+  });
+  $("toQuiz").addEventListener("click",()=>{qIndex=0;renderQuestion();show("quiz");});
+  function renderQuestion(){
+    answered=false;
+    const q=questions[qIndex];
+    $("questionText").textContent=(qIndex+1)+". "+q.q;
+    $("quizProgress").style.width=(qIndex/questions.length*100)+"%";
+    $("quizFeedback").textContent="";
+    $("nextQuestion").classList.add("hidden");
+    $("nextQuestion").textContent=qIndex===questions.length-1?"Lihat Hasil 🏆":"Pertanyaan Berikutnya ➜";
+    $("quizChoices").innerHTML="";
+    q.a.forEach((answer,i)=>{
+      const b=document.createElement("button");b.className="choice";b.textContent=answer;
+      b.addEventListener("click",()=>{
+        if(answered)return;answered=true;
+        if(i===q.correct){score+=1;$("quizFeedback").textContent=q.explain+" +1 poin";b.classList.add("selected");}
+        else {$("quizFeedback").textContent="Belum tepat. "+q.explain;}
+        [...$("quizChoices").children].forEach(x=>x.disabled=true);
+        $("nextQuestion").classList.remove("hidden");
+      });
+      $("quizChoices").appendChild(b);
+    });
+  }
+  $("nextQuestion").addEventListener("click",()=>{
+    if(qIndex<questions.length-1){qIndex++;renderQuestion();}
+    else {showResults();}
+  });
+  function showResults(){
+    show("result");$("quizProgress").style.width="100%";
+    $("finalScore").textContent="Skor kamu: "+score+" dari 10 poin";
+    let msg=score>=9?"Luar biasa! Kamu ahli fotosintesis.":score>=6?"Bagus sekali! Pengetahuanmu tentang fotosintesis semakin kuat.":"Terus berlatih! Baca kembali kebutuhan dan hasil fotosintesis, lalu coba lagi.";
+    $("resultMessage").textContent=msg;
+  }
+  $("restartBtn").addEventListener("click",()=>{
+    score=0;selected=new Set();qIndex=0;answered=false;
+    document.querySelectorAll("#ingredientChoices .choice").forEach(b=>{b.classList.remove("selected");b.disabled=false;});
+    document.querySelectorAll("#partChoices .choice").forEach(b=>{b.classList.remove("selected");b.disabled=false;});
+    $("ingredientFeedback").textContent="";$("partFeedback").textContent="";
+    $("checkIngredients").classList.remove("hidden");$("toQuiz").classList.add("hidden");
+    $("progressBar").style.width="0%";show("welcome");
+  });
+})();
+</script>
+</body>
+</html>
