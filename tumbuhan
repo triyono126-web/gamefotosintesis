@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Game Edukasi Fotosintesis</title>
+    <style>
+        body { font-family: Arial, sans-serif; text-align: center; background-color: #eef9ff; padding: 20px; }
+        .card { max-width: 500px; margin: 0 auto; background: white; padding: 25px; border-radius: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 20px 0; }
+        .item { padding: 12px; border: 2px solid #4caf50; background: #f1f8e9; cursor: pointer; border-radius: 8px; font-weight: bold; }
+        .item.active { background: #4caf50; color: white; }
+        button.check { padding: 10px 20px; background: #2e7d32; color: white; border: none; border-radius: 6px; cursor: pointer; font-size: 16px; }
+        #message { margin-top: 15px; font-size: 16px; font-weight: bold; }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <h2>Simulasi Fotosintesis</h2>
+        <p>Pilih semua unsur yang dibutuhkan dan dihasilkan dalam fotosintesis:</p>
+        
+        <div class="grid">
+            <div class="item" onclick="selectItem(this, 'Cahaya Matahari')">Cahaya Matahari</div>
+            <div class="item" onclick="selectItem(this, 'Air')">Air</div>
+            <div class="item" onclick="selectItem(this, 'Karbon Dioksida')">Karbon Dioksida</div>
+            <div class="item" onclick="selectItem(this, 'Glukosa')">Glukosa</div>
+            <div class="item" onclick="selectItem(this, 'Oksigen')">Oksigen</div>
+            <div class="item" onclick="selectItem(this, 'Plastik')">Plastik</div>
+        </div>
+
+        <button class="check" onclick="verify()">Periksa Jawaban</button>
+        <div id="message"></div>
+    </div>
+
+    <script>
+        let chosen = [];
+
+        function selectItem(element, name) {
+            if (chosen.includes(name)) {
+                chosen = chosen.filter(i => i !== name);
+                element.classList.remove('active');
+            } else {
+                chosen.push(name);
+                element.classList.add('active');
+            }
+        }
+
+        function verify() {
+            const correctList = ['Cahaya Matahari', 'Air', 'Karbon Dioksida', 'Glukosa', 'Oksigen'];
+            const isValid = chosen.length === 5 && chosen.every(val => correctList.includes(val));
+            
+            const msg = document.getElementById('message');
+            if (isValid) {
+                msg.innerText = "Tepat sekali! Fotosintesis membutuhkan Air, Karbon Dioksida, dan Cahaya Matahari untuk menghasilkan Glukosa dan Oksigen.";
+                msg.style.color = "green";
+            } else {
+                msg.innerText = "Jawaban belum tepat. Periksa kembali pilihan Anda.";
+                msg.style.color = "red";
+            }
+        }
+    </script>
+</body>
+</html>
